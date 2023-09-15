@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Play HLS Stream</title>
+    <link href="https://vjs.zencdn.net/7.15.4/video-js.css" rel="stylesheet">
+    <script src="https://vjs.zencdn.net/7.15.4/video.js"></script>
+</head>
+<body>
+    <video id="videoPlayer" class="video-js vjs-default-skin" controls width="640" height="360">
+        <source id="hlsSource" src="" type="application/x-mpegURL">
+        <source id="dashSource" src="" type="application/dash+xml">
+    </video>
+    
+    <input type="text" id="url" placeholder="URL du flux HLS" />
+    
+    <button type="submit" id="submit">Lire le flux</button>
+    
+    <script>
+        var url;
+        var inputUrl = document.getElementById('url');
+        var videoPlayer = document.getElementById('videoPlayer');
+        var hlsSource = document.getElementById('hlsSource');
+        var dashSource = document.getElementById('dashSource');
+
+        inputUrl.addEventListener('change', function() {
+            url = this.value;
+            console.log(`URL HLS stream: ${url}`);
+            hlsSource.src = url;
+            dashSource.src = url;
+        });
+
+        var buttonSubmit = document.getElementById('submit');
+        
+        buttonSubmit.addEventListener('click', function() {
+            console.log(`HLS URL au clic: ${url}`);
+            if (url.includes("dash")) {
+                hlsSource.src = ""
+            } else {
+                dashSource.src = ""
+            }
+            
+            var player = videojs('videoPlayer');
+            
+            player.ready(function() {
+                console.log("PLaying HLS stream....");
+                player.play();
+            });
+        });
+    </script>
+</body>
+</html>
